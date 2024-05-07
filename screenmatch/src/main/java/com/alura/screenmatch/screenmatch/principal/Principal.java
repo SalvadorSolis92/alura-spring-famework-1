@@ -38,12 +38,13 @@ public class Principal {
     //temporadas.forEach(System.out::println);
 
         //Mostrar solo el titulo de las temporadas
-        for (int i = 0; i < datos.totalDeTemporadas(); i++) {
-            List<DatosEpisodio> episodiosTemporada = temporadas.get(i).episodios();
-            for (int j = 0; j < episodiosTemporada.size(); j++) {
-                System.out.println(episodiosTemporada.get(j).titulo());
-            }
-        }
+//        for (int i = 0; i < datos.totalDeTemporadas(); i++) {
+//            List<DatosEpisodio> episodiosTemporada = temporadas.get(i).episodios();
+//            for (int j = 0; j < episodiosTemporada.size(); j++) {
+//                System.out.println(episodiosTemporada.get(j).titulo());
+//            }
+//        }
 
+        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));//lambda
     }
 }
