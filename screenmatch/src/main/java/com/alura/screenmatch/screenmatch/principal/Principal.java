@@ -1,5 +1,6 @@
 package com.alura.screenmatch.screenmatch.principal;
 
+import com.alura.screenmatch.screenmatch.model.DatosEpisodio;
 import com.alura.screenmatch.screenmatch.model.DatosSeries;
 import com.alura.screenmatch.screenmatch.model.DatosTemporadas;
 import com.alura.screenmatch.screenmatch.service.ConsumoAPI;
@@ -18,23 +19,31 @@ public class Principal {
     private final String API_KEY = "&apikey=c131c757";
 
 
-    public void muestrMenu(){
+    public void muestrMenu() {
         System.out.println("por favor escribe el nombre de la serie");
         var serie = teclado.nextLine();
 
         //datos generales de la serie
-        var json = consumoAPI.obtenerDatos(URL_BASE+serie.replace(" ","+")+API_KEY);
+        var json = consumoAPI.obtenerDatos(URL_BASE + serie.replace(" ", "+") + API_KEY);
         var datos = conversor.obtenerDatos(json, DatosSeries.class);
         System.out.println(datos);
         //busca los datos de todas las temporadas
         List<DatosTemporadas> temporadas = new ArrayList<>();
         for (int i = 1; i <= datos.totalDeTemporadas(); i++) {
-            json = consumoAPI.obtenerDatos(URL_BASE+serie.replace(" ","+")+"&Season="+i+API_KEY);
+            json = consumoAPI.obtenerDatos(URL_BASE + serie.replace(" ", "+") + "&Season=" + i + API_KEY);
             var datosTemporada = conversor.obtenerDatos(json, DatosTemporadas.class);
             temporadas.add(datosTemporada);
         }
 
-        temporadas.forEach(System.out::println);
+    //temporadas.forEach(System.out::println);
+
+        //Mostrar solo el titulo de las temporadas
+        for (int i = 0; i < datos.totalDeTemporadas(); i++) {
+            List<DatosEpisodio> episodiosTemporada = temporadas.get(i).episodios();
+            for (int j = 0; j < episodiosTemporada.size(); j++) {
+                System.out.println(episodiosTemporada.get(j).titulo());
+            }
+        }
 
     }
 }
