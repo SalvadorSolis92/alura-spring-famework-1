@@ -45,6 +45,7 @@ public class Principal {
 //            }
 //        }
 
+        //(argumentos) -> { cuerpo-de-la-función }
         temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));//lambda
     }
 }
