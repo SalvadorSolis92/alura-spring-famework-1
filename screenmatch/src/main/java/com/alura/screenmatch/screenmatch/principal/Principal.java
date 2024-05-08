@@ -6,7 +6,10 @@ import com.alura.screenmatch.screenmatch.model.DatosTemporadas;
 import com.alura.screenmatch.screenmatch.model.Episodio;
 import com.alura.screenmatch.screenmatch.service.ConsumoAPI;
 import com.alura.screenmatch.screenmatch.service.ConvierteDatos;
+import org.springframework.format.datetime.DateFormatter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -38,7 +41,7 @@ public class Principal {
             temporadas.add(datosTemporada);
         }
 
-    //temporadas.forEach(System.out::println);
+        //temporadas.forEach(System.out::println);
 
         //Mostrar solo el titulo de las temporadas
 //        for (int i = 0; i < datos.totalDeTemporadas(); i++) {
@@ -69,5 +72,21 @@ public class Principal {
                 .collect(Collectors.toList());
 
         episodios.forEach(System.out::println);
+
+        //busqueda de episodios a partir de año x
+        System.out.println("Ingresa el Año en que se transmitió el episodio");
+        var fecha = teclado.nextInt();
+        teclado.nextLine();
+
+        LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        episodios.stream()
+                .filter(e -> e.getFechaLanzamiento() != null && e.getFechaLanzamiento().isAfter(fechaBusqueda))
+                .forEach(e -> System.out.println(
+                        "Temporada " + e.getTemporada() +
+                                "Episodio " + e.getTitulo() +
+                                "Fecha Lanzamiento " + dtf.format(e.getFechaLanzamiento())
+                ));
     }
 }
