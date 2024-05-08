@@ -61,8 +61,12 @@ public class Principal {
         //top 5 episodios
         datosEpisodios.stream()
                 .filter(e -> !e.evaluacion().equalsIgnoreCase("N/A"))
+                .peek(e -> System.out.println("Primer filtro NA " + e))
                 .sorted(Comparator.comparing(DatosEpisodio::evaluacion).reversed())
+                .peek(e -> System.out.println("Segundo ordenacion M>m"))
+                .map(e -> e.titulo().toUpperCase())
                 .limit(5)
+                .peek(e -> System.out.println("Limit"))
                 .forEach(System.out::println);
 
         //comvitiendo lista a tipo episodio
@@ -71,22 +75,22 @@ public class Principal {
                         map(d -> new Episodio(t.numero(), d)))
                 .collect(Collectors.toList());
 
-        episodios.forEach(System.out::println);
+        //episodios.forEach(System.out::println);
 
         //busqueda de episodios a partir de año x
         System.out.println("Ingresa el Año en que se transmitió el episodio");
         var fecha = teclado.nextInt();
-        teclado.nextLine();
-
-        LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        episodios.stream()
-                .filter(e -> e.getFechaLanzamiento() != null && e.getFechaLanzamiento().isAfter(fechaBusqueda))
-                .forEach(e -> System.out.println(
-                        "Temporada " + e.getTemporada() +
-                                "Episodio " + e.getTitulo() +
-                                "Fecha Lanzamiento " + dtf.format(e.getFechaLanzamiento())
-                ));
+//        teclado.nextLine();
+//
+//        LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//
+//        episodios.stream()
+//                .filter(e -> e.getFechaLanzamiento() != null && e.getFechaLanzamiento().isAfter(fechaBusqueda))
+//                .forEach(e -> System.out.println(
+//                        "Temporada " + e.getTemporada() +
+//                                "Episodio " + e.getTitulo() +
+//                                "Fecha Lanzamiento " + dtf.format(e.getFechaLanzamiento())
+//                ));
     }
 }
