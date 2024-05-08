@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -120,5 +121,15 @@ public class Principal {
         Collectors.averagingDouble(Episodio::getEvaluacion)));
 
         System.out.println(evaluacionesPorTemporada);
+
+
+        //Genera estadisticas como conteo, suma, minimo y maximo 
+        DoubleSummaryStatistics estadisticas = episodios.stream()
+        .filter(e -> e.getEvaluacion() > 0.0)
+        .collect(Collectors.summarizingDouble(Episodio::getEvaluacion));
+
+        System.out.println("Media de las evaluaciones " + estadisticas.getAverage());
+        System.out.println("Episodio mejor evaluado " + estadisticas.getMax());
+        System.out.println("Episodio peor evaluado " + estadisticas.getMin());
     }
 }
