@@ -13,7 +13,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -32,7 +35,7 @@ public class Principal {
         //datos generales de la serie
         var json = consumoAPI.obtenerDatos(URL_BASE + serie.replace(" ", "+") + API_KEY);
         var datos = conversor.obtenerDatos(json, DatosSeries.class);
-        System.out.println(datos);
+        //System.out.println(datos);
         //busca los datos de todas las temporadas
         List<DatosTemporadas> temporadas = new ArrayList<>();
         for (int i = 1; i <= datos.totalDeTemporadas(); i++) {
@@ -78,8 +81,8 @@ public class Principal {
         //episodios.forEach(System.out::println);
 
         //busqueda de episodios a partir de año x
-        System.out.println("Ingresa el Año en que se transmitió el episodio");
-        var fecha = teclado.nextInt();
+//        System.out.println("Ingresa el Año en que se transmitió el episodio");
+//        var fecha = teclado.nextInt();
 //        teclado.nextLine();
 //
 //        LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
@@ -92,5 +95,30 @@ public class Principal {
 //                                "Episodio " + e.getTitulo() +
 //                                "Fecha Lanzamiento " + dtf.format(e.getFechaLanzamiento())
 //                ));
+
+
+        //Buscar capitulo por subcadena
+/*         System.out.println("Ingresa el titulo del episodio para buscarlo");
+        var subCadenaTitulo = teclado.nextLine();
+        
+        Optional<Episodio> episodioBuscado = episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(subCadenaTitulo.toUpperCase()))   //filtro
+                .findFirst();                                           //primera coincidencia
+
+
+        if (episodioBuscado != null) {
+                System.out.println("Datos encontrados del Episodio");
+                System.out.println(episodioBuscado.toString());
+        } else {
+                System.out.println("Episodio no encontrado");
+        } */
+
+        //Series y evaluaciones
+        Map<Integer, Double> evaluacionesPorTemporada = episodios.stream()
+        .filter(e -> e.getEvaluacion() > 0.0)
+        .collect(Collectors.groupingBy(Episodio::getTemporada,
+        Collectors.averagingDouble(Episodio::getEvaluacion)));
+
+        System.out.println(evaluacionesPorTemporada);
     }
 }
